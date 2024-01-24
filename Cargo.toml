@@ -1,7 +1,7 @@
 [workspace]
 
 
-members = [
+members = [ "api-crud", "db_stuff",
     "hello-project",
     "rust-project-1",
 ]
