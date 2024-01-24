@@ -1,0 +1,7 @@
+[workspace]
+
+
+members = [
+    "hello-project",
+    "rust-project-1",
+]
