@@ -11,11 +11,15 @@ impl UserRepository{
     }
 
     pub async fn create_record(&self, name: &str, email: &str){
-        let _ = sqlx::query!(
+        println!("Creating record starting... name:- {} and email:- {}", name, email);
+        
+        let result = sqlx::query!(
             "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *",
             name,
             email
         ).fetch_one(&self.pool).await;
+
+        println!("{:?}", result);
         println!("indal user created successfully!!");
     }
 }

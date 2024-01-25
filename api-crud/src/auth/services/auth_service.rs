@@ -5,7 +5,7 @@ impl AuthService{
       Self {}
     }
     
-    pub fn login() {
+    pub fn user_login() {
       println!("Login func calling..")
     }
 }

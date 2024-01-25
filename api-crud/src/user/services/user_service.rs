@@ -11,7 +11,8 @@ impl UserService {
   }
 
   pub async fn create_user(&self) {
-    self.user_repository.create_record("Indal Yadav", "indal@gmail.com");
+    println!("create super service start...");
+    self.user_repository.create_record("Indal Yadav", "indal@gmail.com").await;
     println!("User service create func!!")
   }
 

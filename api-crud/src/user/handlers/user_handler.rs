@@ -15,7 +15,8 @@ impl UserHandler {
     }
     
     pub async fn create_user(app_state: web::Data<AppState>) -> HttpResponse {
-        app_state.user_service.create_user();
+        println!("User handler called!!!");
+        app_state.user_service.create_user().await;
         HttpResponse::Created().finish()
     }
 }

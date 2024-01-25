@@ -8,7 +8,7 @@ use dotenv::dotenv;
 
 
 use user::{repositories::user_repository::UserRepository, services::user_service::UserService};
-use auth::services::auth_service::AuthService;
+use crate::auth::services::auth_service::AuthService;
 use crate::user::routes::user_router;
 use crate::auth::routes::auth_router;
 use crate::config::db;
@@ -32,8 +32,8 @@ async fn main() -> std::io::Result<()> {
             user_service: UserService::new(UserRepository::new(db_pool.clone())),
             auth_service: AuthService::new(),
         }))
-        .configure(user_router::config)
         .configure(auth_router::config)
+        .configure(user_router::config)
     })
     .bind(("127.0.0.1", 8005))?
     .run()
