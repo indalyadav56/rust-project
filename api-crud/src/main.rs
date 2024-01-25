@@ -8,7 +8,9 @@ use dotenv::dotenv;
 
 
 use user::{repositories::user_repository::UserRepository, services::user_service::UserService};
-use crate::auth::services::auth_service::AuthService;
+use auth::{repositories::auth_repository::AuthRepository, services::auth_service::AuthService};
+// use auth::repositories::auth_repository::AuthRepository;
+// use auth::services::auth_service::AuthService;
 use crate::user::routes::user_router;
 use crate::auth::routes::auth_router;
 use crate::config::db;
@@ -25,12 +27,14 @@ async fn main() -> std::io::Result<()> {
     env_logger::init();
     
     let db_pool = db::establish_connection().await;
-
+    
     HttpServer::new(move || {
+
+        let user_service = UserService::new(UserRepository::new(db_pool.clone()));
         App::new()
         .app_data(Data::new(AppState{
-            user_service: UserService::new(UserRepository::new(db_pool.clone())),
-            auth_service: AuthService::new(),
+            user_service: user_service, 
+            auth_service: AuthService::new(AuthRepository::new(db_pool.clone())),
         }))
         .configure(auth_router::config)
         .configure(user_router::config)

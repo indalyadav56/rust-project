@@ -1,26 +1,26 @@
 use actix_web::{web, HttpResponse};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::AppState;
 
 
-#[derive(Deserialize)]
-pub struct LoginBody {
-    username: String,
+#[derive(Serialize, Deserialize)]
+pub struct LoginReqBody {
+    email: String,
     password: String,
 }
 
 
-pub struct AuthHandler; 
+pub struct AuthHandler;
 
 impl AuthHandler {
-
-    pub async fn login(app_state: web::Data<AppState>) -> HttpResponse {
-        app_state.user_service.get_users();
-        // println!("username: {} and password: {}", login_body.username, login_body.password);
-        HttpResponse::Ok().json("login user") 
+    pub async fn login(req_body: web::Json<LoginReqBody>, app_state: web::Data<AppState>) -> HttpResponse {
+        app_state.auth_service.user_login(req_body.email.to_string(), req_body.password.to_string()).await;
+        HttpResponse::Ok().json(req_body)
     }
-    pub async fn register() -> HttpResponse {
+
+    pub async fn register(app_state: web::Data<AppState>) -> HttpResponse {
+        app_state.auth_service.user_register();
         HttpResponse::Ok().json("register user") 
     }
 }
