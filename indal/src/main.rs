@@ -12,6 +12,8 @@ use database::db::{init_postgres_db, init_database};
 
 #[tokio::main]
 async fn main() -> Result<(), sqlx::Error> {
+   dotenv::dotenv().ok();
+
    let pool = init_database().await?;
 
    let user_repo = UserRepository::new(&pool);
