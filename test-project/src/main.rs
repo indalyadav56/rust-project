@@ -4,10 +4,11 @@ mod services;
 mod models;
 mod routes;
 mod handlers;
-
+mod middleware;
 
 use std::sync::Arc;
 
+use actix_web::middleware::from_fn;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use services::user_service::UserServiceImp;
 use utoipa::OpenApi;
@@ -66,6 +67,7 @@ async fn main() -> std::io::Result<()> {
             .configure(routes::auth::auth_routes_config)
             .configure(routes::user_routes::user_routes_config)
             .wrap(actix_web::middleware::Logger::default())
+            .wrap(from_fn(middleware::auth::my_middleware))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
